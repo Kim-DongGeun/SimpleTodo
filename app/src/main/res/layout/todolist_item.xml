@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:id="@+id/list_item_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/item_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hello"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:paddingStart="20dp"
+                android:paddingTop="10dp"
+                />
+            <TextView
+                android:id="@+id/item_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2020.12.19 오후13:30"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                android:paddingStart="20dp"
+                android:paddingBottom="10dp"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>
