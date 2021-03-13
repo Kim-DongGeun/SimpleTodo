@@ -11,6 +11,8 @@ import com.example.simpletodo.DB.Task
 import com.example.simpletodo.DB.TaskRepository
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class TaskViewModel(private val repository: TaskRepository) : ViewModel(), Observable {
@@ -87,12 +89,12 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel(), Obser
         val target = tasks.value!!.filter { it.id == id }
         //날짜 변경
         //target[0].timeStamp =
-        val dateFormat = SimpleDateFormat("y년 M월 d일")
+        val dateFormat = SimpleDateFormat("y년 M월 d일", Locale.KOREA)
         val date : Date = dateFormat.parse(target[0].dateStamp)
         val cal = Calendar.getInstance()
         cal.time = date
         cal.add(Calendar.DAY_OF_MONTH, 1)
-        target[0].dateStamp = SimpleDateFormat("y년 M월 d일").format(cal.time).toString()
+        target[0].dateStamp = SimpleDateFormat("y년 M월 d일", Locale.KOREA).format(cal.time).toString()
         update(target[0])
     }
 
@@ -144,9 +146,12 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel(), Obser
             }
         }
     }
-
-    fun isExist(date : Date){
-
+    // 해당 날짜에 일정이 있는지 체크
+    fun isExist(date : LocalDate) : Boolean {
+        val formatter = DateTimeFormatter.ofPattern("y년 M월 d일", Locale.KOREAN)
+        val dateStr = formatter.format(date)
+        val value = tasks.value!!.filter { it.dateStamp == dateStr }
+        return value.isNotEmpty()
     }
 
 

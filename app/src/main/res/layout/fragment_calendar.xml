@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.simpletodo.CalendarViewModel" />
+    </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -17,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
+                <!--TextView
                     android:id="@+id/month_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -33,7 +38,12 @@
                     app:cv_dayViewResource="@layout/calendar_day"
                     app:cv_monthHeaderResource="@layout/calendar_header"
                     app:cv_orientation="horizontal"
-                    app:cv_scrollMode="paged" />
+                    app:cv_scrollMode="paged" /-->
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/calendar_pager"/>
 
                 <TextView
                     android:id="@+id/exThreeSelectedDateText"
@@ -49,7 +59,8 @@
                     android:textAllCaps="true"
                     android:textColor="@color/example_3_black"
                     android:textSize="14sp"
-                    tools:text="7 Jan, 2019" />
+                    android:text="@{viewModel.selectedDate}"
+                    />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/exThreeRv"

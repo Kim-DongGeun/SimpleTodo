@@ -7,17 +7,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.simpletodo.DB.Task
 import com.example.simpletodo.databinding.TodolistItemBinding
 
-class CalendarAdapter() : RecyclerView.Adapter<EventsViewHolder>() {
+class CalendarAdapter(private val clickListener: (Task) -> Unit) : RecyclerView.Adapter<MyViewHolder>() {
     private var events = ArrayList<Task>()
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventsViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding : TodolistItemBinding = DataBindingUtil.inflate(layoutInflater, R.layout.todolist_item, parent, false)
-        return EventsViewHolder(binding)
+        return MyViewHolder(binding)
 
     }
 
-    override fun onBindViewHolder(holder: EventsViewHolder, position: Int) {
-        holder.bind(events[position])
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.bind(events[position], clickListener)
     }
 
     override fun getItemCount(): Int {
@@ -30,9 +30,3 @@ class CalendarAdapter() : RecyclerView.Adapter<EventsViewHolder>() {
     }
 }
 
-class EventsViewHolder(private val binding : TodolistItemBinding) : RecyclerView.ViewHolder(binding.root){
-    fun bind(task : Task){
-        binding.itemTitle.text = task.title
-        binding.itemDate.text = task.timeStamp
-    }
-}

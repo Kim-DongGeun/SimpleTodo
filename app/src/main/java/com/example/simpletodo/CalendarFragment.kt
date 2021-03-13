@@ -6,10 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
+import com.example.simpletodo.DB.Task
 import com.example.simpletodo.DB.TaskDatabase
 import com.example.simpletodo.DB.TaskRepository
 import com.example.simpletodo.databinding.CalendarDayBinding
@@ -33,6 +36,7 @@ class CalendarFragment : Fragment() {
     private lateinit var dayBinding: CalendarDayBinding
     private lateinit var headerBinding : CalendarHeaderBinding
     private lateinit var taskViewModel: TaskViewModel
+    private lateinit var calendarViewModel : CalendarViewModel
     private lateinit var calendarAdapter: CalendarAdapter
     private var selectedDate: LocalDate? = null
     private val today = LocalDate.now()
@@ -41,7 +45,9 @@ class CalendarFragment : Fragment() {
     private val titleFormatter = DateTimeFormatter.ofPattern("yyyy년 MMM", Locale.KOREAN)
     private val selectionFormatter = DateTimeFormatter.ofPattern("yyy년 MMM d일", Locale.KOREAN)
 
-    inner class DayViewContainer(view: View) : ViewContainer(view) {
+    var pageIndex = 0
+
+    /*inner class DayViewContainer(view: View) : ViewContainer(view) {
         lateinit var day: CalendarDay // Will be set when this container is bound.
         val binding = CalendarDayBinding.bind(view)
 
@@ -57,7 +63,7 @@ class CalendarFragment : Fragment() {
                 }
             }
         }
-    }
+    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,15 +88,33 @@ class CalendarFragment : Fragment() {
         val factory = TaskViewModelFactory(repository)
 
         taskViewModel = ViewModelProvider(this, factory).get(TaskViewModel::class.java)
+        calendarViewModel = ViewModelProvider(this).get(CalendarViewModel::class.java)
 
+        calendarBinding.viewModel = calendarViewModel
+        calendarBinding.lifecycleOwner = this
 
+        initView()
         return calendarBinding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    private fun initView(){
+        val calendarStateAdapter = CalendarStateAdapter(requireActivity())
+        calendarBinding.calendarPager.adapter = calendarStateAdapter
+        calendarBinding.calendarPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        calendarBinding.calendarPager.setCurrentItem(calendarStateAdapter.fragmentPosition, false)
+
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"),Locale.KOREA)
+        val datetime = SimpleDateFormat("M월 d일", Locale.KOREA).format(calendar.time)
+        calendarViewModel.changeDate(datetime)
+        //calendarBinding.exThreeSelectedDateText.text = datetime
+    }
+
+    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        calendarAdapter = CalendarAdapter()
+
+
+        calendarAdapter = CalendarAdapter({selectedItem: Task->listItemClicked(selectedItem)})
         calendarBinding.exThreeRv.adapter = calendarAdapter
 
         // 달력에 출력할 날짜들 지정
@@ -138,7 +162,7 @@ class CalendarFragment : Fragment() {
                         else -> {
                             textView.setTextColorRes(R.color.example_3_black)
                             textView.background = null
-                            //dotView.isVisible = events[day.date].orEmpty().isNotEmpty()
+                            dotView.isVisible = false
                         }
                     }
                 }
@@ -184,6 +208,7 @@ class CalendarFragment : Fragment() {
         })
     }
 
+
     private fun selectDate(date: LocalDate) {
         if (selectedDate != date) {
             val oldDate = selectedDate
@@ -202,6 +227,11 @@ class CalendarFragment : Fragment() {
         }*/
         calendarBinding.exThreeSelectedDateText.text = selectionFormatter.format(date)
     }
+
+    private fun listItemClicked(task : Task){
+        val bottomSheet = BottomSheet(task, taskViewModel)
+        bottomSheet.show(requireActivity().supportFragmentManager, bottomSheet.tag)
+    }*/
 }
 
 

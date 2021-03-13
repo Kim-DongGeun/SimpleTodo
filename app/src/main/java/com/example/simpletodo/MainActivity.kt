@@ -3,6 +3,7 @@ package com.example.simpletodo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.bottomNavigationView.setOnNavigationItemSelectedListener(this)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     }
 
